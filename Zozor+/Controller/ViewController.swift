@@ -32,11 +32,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func plus() {
-        textView.text = calculation.calculate(with: "+")
+        textView.text = calculation.calculate(with: .addition)
     }
     
     @IBAction func minus() {
-        textView.text = calculation.calculate(with: "-")
+        textView.text = calculation.calculate(with: .subtraction)
     }
     
     @IBAction func equal() {

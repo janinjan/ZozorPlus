@@ -11,12 +11,25 @@ protocol AlertDelegate {
     func presentAlert(title: String, message: String)
 }
 
+enum Operator {
+    case addition
+    case subtraction
+    
+    var sign: String {
+        switch self {
+        case .addition:
+            return "+"
+        case .subtraction:
+            return "-"
+        }
+    }
+}
+
 class Calculation {
     // MARK: - Properties
     var alertDelegate: AlertDelegate?
     var stringNumbers: [String] = [String()]
     var operators: [String] = ["+"]
-    var index = 0
     var isExpressionCorrect: Bool {
         if let stringNumber = stringNumbers.last {
             if stringNumber.isEmpty {
@@ -51,9 +64,9 @@ class Calculation {
         return updateDisplay()
     }
     
-    func calculate(with operatorSign: String) -> String {
+    func calculate(with _operator: Operator) -> String {
         if canAddOperator {
-            operators.append(operatorSign)
+            operators.append(_operator.sign)
             stringNumbers.append("")
         }
         return updateDisplay()
@@ -93,6 +106,5 @@ class Calculation {
     func clear() {
         stringNumbers = [String()]
         operators = ["+"]
-        index = 0
     }
 }
