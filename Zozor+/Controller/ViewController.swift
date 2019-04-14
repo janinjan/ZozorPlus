@@ -12,15 +12,10 @@ class ViewController: UIViewController {
     // MARK: - Properties
     let calculation = Calculation()
     
-    // MARK: - Methods
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        calculation.alertDelegate = self
-    }
-    
     // MARK: - Outlets
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
+    @IBOutlet weak var clearButton: UIButton!
     
     // MARK: - Actions
     @IBAction func tappedNumberButton(_ sender: UIButton) {
@@ -31,16 +26,37 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func didTapClearButton(_ sender: UIButton) {
+        textView.text = calculation.removeLastNumber()
+        setClearButtonTitle()
+    }
+    
     @IBAction func plus() {
         textView.text = calculation.calculate(with: .addition)
+        setClearButtonTitle()
     }
     
     @IBAction func minus() {
         textView.text = calculation.calculate(with: .subtraction)
+        setClearButtonTitle()
     }
     
     @IBAction func equal() {
         textView.text = textView.text + calculation.calculateTotal()
+    }
+    
+    // MARK: - Methods
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        calculation.alertDelegate = self
+    }
+    
+    func setClearButtonTitle() {
+        if calculation.stringNumbers.count > 1 {
+            clearButton.setTitle("C", for: .normal)
+        } else {
+            clearButton.setTitle("AC", for: .normal)
+        }
     }
 }
 

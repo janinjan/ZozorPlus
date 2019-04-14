@@ -107,4 +107,14 @@ class Calculation {
         stringNumbers = [String()]
         operators = ["+"]
     }
+    
+    func removeLastNumber() -> String {
+        if stringNumbers.count == 1 {
+            clear()
+        } else {
+            stringNumbers.removeLast()
+            operators.removeLast()
+        }
+        return updateDisplay()
+    }
 }

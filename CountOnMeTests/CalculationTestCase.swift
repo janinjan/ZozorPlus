@@ -34,6 +34,22 @@ class CalculationTestCase: XCTestCase {
         XCTAssertEqual(calculation.updateDisplay(), "1+1")
     }
     
+    func testUpdateDisplay_whenRemoveLastNumber_shouldReturnEmptyString() {
+        //When
+        _ = calculation.addNewNumber(1)
+        _ = calculation.removeLastNumber()
+        //Then
+        XCTAssertEqual(calculation.updateDisplay(), "")
+    }
+    
+    func testUpdateDisplay_whenRemoveLastNumberInAddition_shoulRemoveLastNumber() {
+        _ = calculation.addNewNumber(1)
+        _ = calculation.calculate(with: .addition)
+        _ = calculation.addNewNumber(1)
+        _ = calculation.removeLastNumber()
+        XCTAssertEqual(calculation.updateDisplay(), "1")
+    }
+    
     func testCalculateTotal_WhenAdditionOperation_shouldReturnCorrectResultInString() {
         //When
         _ = calculation.addNewNumber(1)
