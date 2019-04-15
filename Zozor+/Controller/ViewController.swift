@@ -31,6 +31,10 @@ class ViewController: UIViewController {
         setClearButtonTitle()
     }
     
+    @IBAction func didTapDecimalPoint(_ sender: UIButton) {
+        textView.text = calculation.addDecimalPoint()
+    }
+    
     @IBAction func plus() {
         textView.text = calculation.calculate(with: .addition)
         setClearButtonTitle()

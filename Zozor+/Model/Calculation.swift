@@ -30,6 +30,7 @@ class Calculation {
     var alertDelegate: AlertDelegate?
     var stringNumbers: [String] = [String()]
     var operators: [String] = ["+"]
+    var decimalPoint = "."
     var isExpressionCorrect: Bool {
         if let stringNumber = stringNumbers.last {
             if stringNumber.isEmpty {
@@ -54,12 +55,33 @@ class Calculation {
         return true
     }
     
+    var canAddDecimalPoint: Bool {
+        if let stringNumber = stringNumbers.last {
+            if stringNumber.contains(decimalPoint) {
+                print("User can not add two decimal points to a number")
+                return false
+            }
+        }
+        return true
+    }
+    
     // MARK: - Methods
     func addNewNumber(_ newNumber: Int) -> String {
         if let stringNumber = stringNumbers.last {
             var stringNumberMutable = stringNumber
             stringNumberMutable += "\(newNumber)"
             stringNumbers[stringNumbers.count-1] = stringNumberMutable
+        }
+        return updateDisplay()
+    }
+    
+    func addDecimalPoint() -> String {
+        if canAddDecimalPoint {
+            if let stringNumber = stringNumbers.last {
+                var stringNumberMutableInFloat = stringNumber
+                stringNumberMutableInFloat += decimalPoint
+                stringNumbers[stringNumbers.count-1] = stringNumberMutableInFloat
+            }
         }
         return updateDisplay()
     }
@@ -76,9 +98,9 @@ class Calculation {
         if !isExpressionCorrect {
             return ""
         }
-        var total = 0
+        var total: Float = 0.0
         for (i, stringNumber) in stringNumbers.enumerated() {
-            if let number = Int(stringNumber) {
+            if let number = Float(stringNumber) {
                 if operators[i] == "+" {
                     total += number
                 } else if operators[i] == "-" {

@@ -56,7 +56,16 @@ class CalculationTestCase: XCTestCase {
         _ = calculation.calculate(with: .addition)
         _ = calculation.addNewNumber(1)
         //Then
-        XCTAssertEqual(calculation.calculateTotal(), "=2")
+        XCTAssertEqual(calculation.calculateTotal(), "=2.0")
+    }
+    
+    func testAddDecimalPoint_WhenDecimalPointIsTapped_shouldAddDecimalPointToNumber() {
+        //When
+        _ = calculation.addNewNumber(8)
+        _ = calculation.addDecimalPoint()
+        _ = calculation.addNewNumber(5)
+        //Then
+        XCTAssertEqual(calculation.updateDisplay(), "8.5")
     }
     
     func testCalculateTotal_WhenSubtractionOperation_shouldReturnCorrectResultInString() {
@@ -65,7 +74,16 @@ class CalculationTestCase: XCTestCase {
         _ = calculation.calculate(with: .subtraction)
         _ = calculation.addNewNumber(1)
         //Then
-        XCTAssertEqual(calculation.calculateTotal(), "=0")
+        XCTAssertEqual(calculation.calculateTotal(), "=0.0")
+    }
+    
+    func testCanAddDecimalPoint_whenAlreadyContainsOne_shouldReturnFalse() {
+        //When
+        _ = calculation.addNewNumber(1)
+        _ = calculation.addDecimalPoint()
+        _ = calculation.addDecimalPoint()
+        //Then
+        XCTAssertFalse(calculation.canAddDecimalPoint)
     }
     
     func testIsExpressionCorrect_whenIncorrectExpression_shouldReturnFalseWithAlertMessage() {
