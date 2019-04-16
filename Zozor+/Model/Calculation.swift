@@ -16,8 +16,7 @@ protocol AlertDelegate {
 
 // enum cases of calculation operators of the calculator
 enum Operator {
-    case addition
-    case subtraction
+    case addition, subtraction
     
     var sign: String {
         switch self {
@@ -36,7 +35,7 @@ class Calculation {
     // MARK: - Properties
     var alertDelegate: AlertDelegate? // creation of a delegate property in the delegating class to keep track of the delegate
     var stringNumbers: [String] = [String()]
-    var operators: [String] = ["+"]
+    var operators: [Operator] = [.addition]
     let decimalPoint = "."
     var isExpressionCorrect: Bool {
         if let stringNumber = stringNumbers.last {
@@ -111,7 +110,7 @@ class Calculation {
      */
     func calculate(with _operator: Operator) -> String {
         if canAddOperator {
-            operators.append(_operator.sign)
+            operators.append(_operator)
             stringNumbers.append("")
         }
         return updateDisplay()
@@ -124,9 +123,9 @@ class Calculation {
         var total: Float = 0.0
         for (i, stringNumber) in stringNumbers.enumerated() {
             if let number = Float(stringNumber) {
-                if operators[i] == "+" {
+                if operators[i] == .addition {
                     total += number
-                } else if operators[i] == "-" {
+                } else if operators[i] == .subtraction {
                     total -= number
                 }
             }
@@ -140,7 +139,7 @@ class Calculation {
         for (i, stringNumber) in stringNumbers.enumerated() {
             // Add operator
             if i > 0 {
-                text += operators[i]
+                text += operators[i].sign
             }
             // Add number
             text += stringNumber
@@ -153,7 +152,7 @@ class Calculation {
      */
     private func clear() {
         stringNumbers = [String()]
-        operators = ["+"]
+        operators = [.addition]
     }
     
     func removeLastNumber() -> String {
