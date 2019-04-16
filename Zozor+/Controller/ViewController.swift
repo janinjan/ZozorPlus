@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     // MARK: - Properties
-    let calculation = Calculation()
+    let calculation = Calculation() // Created instance of Calculation class
     
     // MARK: - Outlets
     @IBOutlet weak var textView: UITextView!
@@ -26,11 +26,17 @@ class ViewController: UIViewController {
         }
     }
     
+    /**
+     * Clears last stored value and remove it from the display field
+     */
     @IBAction func didTapClearButton(_ sender: UIButton) {
         textView.text = calculation.removeLastNumber()
         setClearButtonTitle()
     }
     
+    /**
+     * Adds decimal point to a number
+     */
     @IBAction func didTapDecimalPoint(_ sender: UIButton) {
         textView.text = calculation.addDecimalPoint()
     }
@@ -45,6 +51,9 @@ class ViewController: UIViewController {
         setClearButtonTitle()
     }
     
+    /**
+     * Gets result of calculation by pressing equal and displays it
+     */
     @IBAction func equal() {
         textView.text = textView.text + calculation.calculateTotal()
     }
@@ -52,20 +61,29 @@ class ViewController: UIViewController {
     // MARK: - Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        calculation.alertDelegate = self
+        calculation.alertDelegate = self // add a delegate to the created instance and assign it to ViewController
     }
     
+    /**
+     * Clear button can dislay "C" or "AC"
+     */
     func setClearButtonTitle() {
         if calculation.stringNumbers.count > 1 {
-            clearButton.setTitle("C", for: .normal)
+            clearButton.setTitle("C", for: .normal) // title change to "C" when at least a number + an operator are pressed. ex: "2+"
         } else {
-            clearButton.setTitle("AC", for: .normal)
+            clearButton.setTitle("AC", for: .normal) // title change to "AC" when clear button is pressed and only one number is displayed. ex: "2"
         }
     }
 }
 
+/**
+ * extension of view controller that adopts the protocol in order to conform to the layout defined in AlertDelegate
+ */
 extension ViewController: AlertDelegate {
-    func presentAlert(title: String, message: String) {
+    /**
+     * Displays an alert with a custom message
+     */
+    func presentAlert(title: String, message: String) { // implement the delegate function
         let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         self.present(alertVC, animated: true, completion: nil)

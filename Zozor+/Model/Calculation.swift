@@ -7,10 +7,14 @@
 //
 
 import Foundation
+/**
+ * Creation of a delegate protocol that defines the responsibilities of the delegate
+ */
 protocol AlertDelegate {
     func presentAlert(title: String, message: String)
 }
 
+// enum cases of calculation operators of the calculator
 enum Operator {
     case addition
     case subtraction
@@ -25,16 +29,20 @@ enum Operator {
     }
 }
 
+/**
+ * Calculation class contains all calculation operations
+ */
 class Calculation {
     // MARK: - Properties
-    var alertDelegate: AlertDelegate?
+    var alertDelegate: AlertDelegate? // creation of a delegate property in the delegating class to keep track of the delegate
     var stringNumbers: [String] = [String()]
     var operators: [String] = ["+"]
-    var decimalPoint = "."
+    let decimalPoint = "."
     var isExpressionCorrect: Bool {
         if let stringNumber = stringNumbers.last {
             if stringNumber.isEmpty {
                 if stringNumbers.count == 1 {
+                    // call the delegate ViewController to display an alert
                     alertDelegate?.presentAlert(title: "Zéro!", message: "Démarrez un nouveau calcul !")
                 } else {
                     alertDelegate?.presentAlert(title: "Zéro!", message: "Entrez une expression correcte !")
@@ -45,6 +53,9 @@ class Calculation {
         return true
     }
     
+    /**
+     * Check if we can add a calcul operator
+     */
     var canAddOperator: Bool {
         if let stringNumber = stringNumbers.last {
             if stringNumber.isEmpty {
@@ -55,6 +66,9 @@ class Calculation {
         return true
     }
     
+    /**
+     * Check if we can add a decimal point to a number
+     */
     var canAddDecimalPoint: Bool {
         if let stringNumber = stringNumbers.last {
             if stringNumber.contains(decimalPoint) {
@@ -66,6 +80,9 @@ class Calculation {
     }
     
     // MARK: - Methods
+    /**
+     * Add a number and returns it in a String
+     */
     func addNewNumber(_ newNumber: Int) -> String {
         if let stringNumber = stringNumbers.last {
             var stringNumberMutable = stringNumber
@@ -75,6 +92,9 @@ class Calculation {
         return updateDisplay()
     }
     
+    /**
+     * Add decimal point to the current number if canAddDecimalPoint returns true
+     */
     func addDecimalPoint() -> String {
         if canAddDecimalPoint {
             if let stringNumber = stringNumbers.last {
@@ -86,6 +106,9 @@ class Calculation {
         return updateDisplay()
     }
     
+    /**
+     * Add operator whom calculate with
+     */
     func calculate(with _operator: Operator) -> String {
         if canAddOperator {
             operators.append(_operator.sign)
@@ -125,7 +148,10 @@ class Calculation {
         return text
     }
     
-    func clear() {
+    /**
+     * Clear any stored values and operators
+     */
+    private func clear() {
         stringNumbers = [String()]
         operators = ["+"]
     }
@@ -134,8 +160,8 @@ class Calculation {
         if stringNumbers.count == 1 {
             clear()
         } else {
-            stringNumbers.removeLast()
-            operators.removeLast()
+            stringNumbers.removeLast() // the current value in the display field is cleared
+            operators.removeLast() // the current operator is cleared
         }
         return updateDisplay()
     }
