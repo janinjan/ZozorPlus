@@ -25,101 +25,82 @@ class CalculationTestCase: XCTestCase {
         calculation = nil
     }
     
-    func testUpdateDisplay_WhenEnteredAdditionOperation_shouldDisplayAdditionCalculInString() {
-        //When
-        _ = calculation.addNewNumber(1)
-        _ = calculation.calculate(with: .addition)
-        _ = calculation.addNewNumber(1)
-        //Then
-        XCTAssertEqual(calculation.updateDisplay(), "1+1")
-    }
-    
-    func testUpdateDisplay_whenRemoveLastNumber_shouldReturnEmptyString() {
-        //When
-        _ = calculation.addNewNumber(1)
-        _ = calculation.removeLastNumber()
-        //Then
-        XCTAssertEqual(calculation.updateDisplay(), "")
-    }
-    
-    func testUpdateDisplay_whenRemoveLastNumberInAddition_shoulRemoveLastNumber() {
-        _ = calculation.addNewNumber(1)
-        _ = calculation.calculate(with: .addition)
-        _ = calculation.addNewNumber(1)
-        _ = calculation.removeLastNumber()
-        XCTAssertEqual(calculation.updateDisplay(), "1")
-    }
-    
+    // MARK: - Tests calculate with operators
     func testCalculateTotal_WhenAdditionOperation_shouldReturnCorrectResultInString() {
-        //When
         _ = calculation.addNewNumber(1)
         _ = calculation.calculate(with: .addition)
         _ = calculation.addNewNumber(1)
-        //Then
+        
         XCTAssertEqual(calculation.calculateTotal(), "=2.0")
     }
     
-    func testAddDecimalPoint_WhenDecimalPointIsTapped_shouldAddDecimalPointToNumber() {
-        //When
-        _ = calculation.addNewNumber(8)
-        _ = calculation.addDecimalPoint()
-        _ = calculation.addNewNumber(5)
-        //Then
-        XCTAssertEqual(calculation.updateDisplay(), "8.5")
-    }
-    
     func testCalculateTotal_WhenSubtractionOperation_shouldReturnCorrectResultInString() {
-        //When
         _ = calculation.addNewNumber(1)
         _ = calculation.calculate(with: .subtraction)
         _ = calculation.addNewNumber(1)
-        //Then
+        
         XCTAssertEqual(calculation.calculateTotal(), "=0.0")
     }
     
-    func testCanAddDecimalPoint_whenAlreadyContainsOne_shouldReturnFalse() {
-        //When
+    // MARK: - Tests with Decimal Point
+    func testAddDecimalPointToNumber_whenAlreadyContainsOne_shouldNotAddSecondDecimalPoint() {
         _ = calculation.addNewNumber(1)
         _ = calculation.addDecimalPoint()
+        
         _ = calculation.addDecimalPoint()
-        //Then
-        XCTAssertFalse(calculation.canAddDecimalPoint)
+        
+        XCTAssertNotEqual(calculation.stringNumbers[0], "1..")
     }
     
-    func testIsExpressionCorrect_whenIncorrectExpression_shouldReturnFalseWithAlertMessage() {
-        //Given
-        let alertSpy = AlertDelegateSpy()
-        calculation.alertDelegate = alertSpy
-        //When
+    // MARK: - Tests remove numbers
+    func testRemoveLastNumber_whenOnlyOneNumber_shouldReturnEmptyString() {
+        _ = calculation.addNewNumber(1)
+        
+        _ = calculation.removeLastNumber()
+        
+        XCTAssertEqual(calculation.stringNumbers[0], "")
+    }
+    
+    func testRemoveLastNumber_whenTwoNumbersInAddition_shoulReturnFirstNumber() {
         _ = calculation.addNewNumber(1)
         _ = calculation.calculate(with: .addition)
+        _ = calculation.addNewNumber(1)
+        
+        _ = calculation.removeLastNumber()
+        
+        XCTAssertEqual(calculation.stringNumbers[0], "1")
+    }
+    
+    // MARK: - Tests alert messages when Incorrect Expressions
+    func testCalculateTotal_whenLastStringNumberIsAnOperator_shouldReturnEmptyStringWithAlertMessage() {
+        let alertSpy = AlertDelegateSpy()
+        calculation.alertDelegate = alertSpy
+        _ = calculation.addNewNumber(1)
+        _ = calculation.calculate(with: .addition)
+        
         _ = calculation.calculateTotal()
-        //Then
-        XCTAssertFalse(calculation.isExpressionCorrect)
+        
+        XCTAssertEqual(calculation.calculateTotal(), "")
         XCTAssertEqual(alertSpy.getMessage, "Entrez une expression correcte !")
     }
     
-    func testIsExpressionCorrect_whenErrorNewCalcul_shouldReturnFalseWithAlertMessage() {
-        //Given
+    func testCalculateTotal_whenEmptyStringNumbers_shouldReturnAlertMessage() {
         let alertSpy = AlertDelegateSpy()
         calculation.alertDelegate = alertSpy
-        //When
+        
         _ = calculation.calculateTotal()
-        //Then
-        XCTAssertFalse(calculation.isExpressionCorrect)
+        
         XCTAssertEqual(alertSpy.getMessage, "Démarrez un nouveau calcul !")
     }
     
-    func testCanAddOperator_whenIncorrectExpression_shouldReturnFalseWithAlertMessage() {
-        //Given
+    func testAddingOperator_whenLastStringNumberIsAnOperator_shouldReturnAlertMessage() {
         let alertSpy = AlertDelegateSpy()
         calculation.alertDelegate = alertSpy
-        //When
         _ = calculation.addNewNumber(1)
         _ = calculation.calculate(with: .addition)
+        
         _ = calculation.calculate(with: .addition)
-        //Then
-        XCTAssertFalse(calculation.canAddOperator)
+        
         XCTAssertEqual(alertSpy.getMessage, "Expression incorrecte !")
     }
     

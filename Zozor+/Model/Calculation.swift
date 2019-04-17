@@ -35,9 +35,9 @@ class Calculation {
     // MARK: - Properties
     var alertDelegate: AlertDelegate? // creation of a delegate property in the delegating class to keep track of the delegate
     var stringNumbers: [String] = [String()]
-    var operators: [Operator] = [.addition]
-    let decimalPoint = "."
-    var isExpressionCorrect: Bool {
+    private var operators: [Operator] = [.addition]
+    private let decimalPoint = "."
+    private var isExpressionCorrect: Bool {
         if let stringNumber = stringNumbers.last {
             if stringNumber.isEmpty {
                 if stringNumbers.count == 1 {
@@ -55,7 +55,7 @@ class Calculation {
     /**
      * Check if we can add a calcul operator
      */
-    var canAddOperator: Bool {
+    private var canAddOperator: Bool {
         if let stringNumber = stringNumbers.last {
             if stringNumber.isEmpty {
                 alertDelegate?.presentAlert(title: "Zéro!", message: "Expression incorrecte !")
@@ -68,7 +68,7 @@ class Calculation {
     /**
      * Check if we can add a decimal point to a number
      */
-    var canAddDecimalPoint: Bool {
+    private var canAddDecimalPoint: Bool {
         if let stringNumber = stringNumbers.last {
             if stringNumber.contains(decimalPoint) {
                 print("User can not add two decimal points to a number")
@@ -134,7 +134,7 @@ class Calculation {
         return "=\(total)"
     }
     
-    func updateDisplay() -> String {
+    private func updateDisplay() -> String {
         var text = ""
         for (i, stringNumber) in stringNumbers.enumerated() {
             // Add operator

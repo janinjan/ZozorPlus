@@ -55,7 +55,7 @@ class ViewController: UIViewController {
      * Gets result of calculation by pressing equal and displays it
      */
     @IBAction func equal() {
-        textView.text = textView.text + calculation.calculateTotal()
+        textView.text += calculation.calculateTotal()
     }
     
     // MARK: - Methods
@@ -67,7 +67,7 @@ class ViewController: UIViewController {
     /**
      * Clear button can dislay "C" or "AC"
      */
-    func setClearButtonTitle() {
+    private func setClearButtonTitle() {
         if calculation.stringNumbers.count > 1 {
             clearButton.setTitle("C", for: .normal) // title change to "C" when at least a number + an operator are pressed. ex: "2+"
         } else {
