@@ -10,14 +10,14 @@ import Foundation
 /**
  * Creation of a delegate protocol that defines the responsibilities of the delegate
  */
-protocol AlertDelegate {
+protocol AlertDelegate: class {
     func presentAlert(title: String, message: String)
 }
 
 // enum cases of calculation operators of the calculator
 enum Operator {
     case addition, subtraction
-    
+
     var sign: String {
         switch self {
         case .addition:
@@ -33,7 +33,7 @@ enum Operator {
  */
 class Calculation {
     // MARK: - Properties
-    var alertDelegate: AlertDelegate? // creation of a delegate property in the delegating class to keep track of the delegate
+    weak var alertDelegate: AlertDelegate? // Created a delegate property
     var stringNumbers: [String] = [String()]
     private var operators: [Operator] = [.addition]
     private let decimalPoint = "."
@@ -51,7 +51,7 @@ class Calculation {
         }
         return true
     }
-    
+
     /**
      * Check if we can add a calcul operator
      */
@@ -64,7 +64,7 @@ class Calculation {
         }
         return true
     }
-    
+
     /**
      * Check if we can add a decimal point to a number
      */
@@ -77,7 +77,7 @@ class Calculation {
         }
         return true
     }
-    
+
     // MARK: - Methods
     /**
      * Add a number and returns it in a String
@@ -90,7 +90,7 @@ class Calculation {
         }
         return updateDisplay()
     }
-    
+
     /**
      * Add decimal point to the current number if canAddDecimalPoint returns true
      */
@@ -104,7 +104,7 @@ class Calculation {
         }
         return updateDisplay()
     }
-    
+
     /**
      * Add operator whom calculate with
      */
@@ -115,7 +115,7 @@ class Calculation {
         }
         return updateDisplay()
     }
-    
+
     func calculateTotal() -> String {
         if !isExpressionCorrect {
             return ""
@@ -131,9 +131,9 @@ class Calculation {
             }
         }
         clear()
-        return "=\(total)"
+        return total.cleanValue
     }
-    
+
     private func updateDisplay() -> String {
         var text = ""
         for (i, stringNumber) in stringNumbers.enumerated() {
@@ -146,7 +146,7 @@ class Calculation {
         }
         return text
     }
-    
+
     /**
      * Clear any stored values and operators
      */
@@ -154,7 +154,7 @@ class Calculation {
         stringNumbers = [String()]
         operators = [.addition]
     }
-    
+
     func removeLastNumber() -> String {
         if stringNumbers.count == 1 {
             clear()
